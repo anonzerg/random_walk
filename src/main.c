@@ -3,9 +3,9 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
-#define WINDOW_WIDTH	640
-#define WINDOW_HEIGHT	480
-#define CELL_SIDE			20
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
+#define CELL_SIDE 20
 
 void
 render_grid (SDL_Renderer *renderer);
