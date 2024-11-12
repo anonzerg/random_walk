@@ -124,7 +124,7 @@ main (void)
       /*  loop end  */
     }
 
-  printf ("steps %d\n", steps);
+  printf ("%d steps\n", steps);
 
   gsl_rng_free (r);
   SDL_DestroyRenderer (renderer);
