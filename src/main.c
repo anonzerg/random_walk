@@ -115,11 +115,14 @@ main (void)
           break;
         }
 
-      if (i > 0 && i < (WINDOW_W / cell_width) && j > 0 && j < (WINDOW_H / cell_height))
+      if (i >= 0 && i < (WINDOW_W / cell_width) && j >= 0 && j < (WINDOW_H / cell_height))
         gsl_matrix_set (current_state, i, j, 1);
+      else
+        {
+        }
 
       SDL_RenderPresent (renderer);
-      SDL_Delay (2);
+      SDL_Delay (1);
       ++steps;
       /*  loop end  */
     }
@@ -149,14 +152,14 @@ state_render (SDL_Renderer *renderer, gsl_matrix *current_state, SDL_Rect *rect)
       {
         rect -> x = i * rect -> w;
         rect -> y = j * rect -> h;
-        if (gsl_matrix_get (current_state, i, j) == 0)
+        if ((int)gsl_matrix_get (current_state, i, j) == 0)
           {
             if (SDL_SetRenderDrawColor (renderer, 0xff, 0xff, 0xff, 0xff) != 0)
               return -1;
             if (SDL_RenderDrawRect (renderer, rect) != 0)
               return -1;
           }
-        else if (gsl_matrix_get (current_state, i, j) == 1)
+        else if ((int)gsl_matrix_get (current_state, i, j) == 1)
           {
             if (SDL_SetRenderDrawColor (renderer, 0x00, 0x00, 0x00, 0xff) != 0)
               return -1;
