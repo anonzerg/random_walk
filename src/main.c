@@ -1,21 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_rng.h>
-#include <SDL2/SDL.h>
 
-#define TITLE     "random walk"
-#define WINDOW_X  0
-#define WINDOW_Y  0
-#define WINDOW_W  800
-#define WINDOW_H  480
-
-void
-handle_error (const char *msg);
-
-int
-state_render (SDL_Renderer *renderer, gsl_matrix *current_state, SDL_Rect *rect);
+#include "random_walk.h"
 
 int
 main (void)
@@ -27,8 +14,7 @@ main (void)
   unsigned int cell_width, cell_height;
   cell_width  = 4;
   cell_height = 4;
-  gsl_matrix *current_state = gsl_matrix_calloc (WINDOW_W / cell_width,
-                                        WINDOW_H / cell_height);
+  gsl_matrix *current_state = gsl_matrix_calloc (WINDOW_W / cell_width, WINDOW_H / cell_height);
 
   const gsl_rng_type *T;
   gsl_rng *r;
@@ -46,12 +32,8 @@ main (void)
       handle_error ("SDL_Init");
     }
 
-  window = SDL_CreateWindow (TITLE,
-                             WINDOW_X, WINDOW_Y,
-                             WINDOW_W, WINDOW_H,
-                             0);
-                             //SDL_WINDOW_BORDERLESS);
-                             //SDL_WINDOW_OPENGL);
+  window = SDL_CreateWindow (TITLE, WINDOW_X, WINDOW_Y, WINDOW_W, WINDOW_H, 0);
+
   if (window == NULL)
     {
       SDL_DestroyWindow (window);
@@ -134,43 +116,5 @@ main (void)
   SDL_DestroyWindow (window);
 	SDL_Quit ();
 	exit (EXIT_SUCCESS);
-}
-
-void
-handle_error (const char *msg)
-{
-  perror (msg);
-  exit (EXIT_FAILURE);
-}
-
-int
-state_render (SDL_Renderer *renderer, gsl_matrix *current_state, SDL_Rect *rect)
-{
-  unsigned int i, j;
-  for (i = 0; i < current_state -> size1; i++)
-    for (j = 0; j < current_state -> size2; j++)
-      {
-        rect -> x = i * rect -> w;
-        rect -> y = j * rect -> h;
-        if ((int)gsl_matrix_get (current_state, i, j) == 0)
-          {
-            if (SDL_SetRenderDrawColor (renderer, 0xff, 0xff, 0xff, 0xff) != 0)
-              return -1;
-            if (SDL_RenderDrawRect (renderer, rect) != 0)
-              return -1;
-          }
-        else if ((int)gsl_matrix_get (current_state, i, j) == 1)
-          {
-            if (SDL_SetRenderDrawColor (renderer, 0x00, 0x00, 0x00, 0xff) != 0)
-              return -1;
-            if (SDL_RenderFillRect (renderer, rect) != 0)
-              return -1;
-          }
-        else
-          {
-            return -2;
-          }
-      }
-  return 0;
 }
 
