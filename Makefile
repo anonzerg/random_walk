@@ -5,10 +5,10 @@ SRCS := $(wildcard src/*.c)
 OBJS := $(SRCS:src/.c=bin/.o)
 TARGET = random_walk
 
-bin/$(TARGET): $(OBJS)
+bin/$(TARGET): $(OBJS) | bin
 	$(CC) $^ -o $@ $(LIBS)
 
-bin/%.o: src/%.c bin
+bin/%.o: src/%.c | bin
 	$(CC) $(CFLAGS) -c $< -o $@
 
 bin:
