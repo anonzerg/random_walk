@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 #include "random_walk.h"
 
@@ -12,9 +11,10 @@ main (void)
   SDL_Renderer *renderer = NULL;
   SDL_Window *window = NULL;
   unsigned int cell_width, cell_height;
-  cell_width  = 4;
+  cell_width = 4;
   cell_height = 4;
-  gsl_matrix *current_state = gsl_matrix_calloc (WINDOW_W / cell_width, WINDOW_H / cell_height);
+  gsl_matrix *current_state
+      = gsl_matrix_calloc (WINDOW_W / cell_width, WINDOW_H / cell_height);
 
   const gsl_rng_type *T;
   gsl_rng *r;
@@ -24,8 +24,8 @@ main (void)
   if (r == NULL)
     handle_error ("gsl_rng_alloc");
 
-  SDL_Rect cell = {0, 0, cell_width, cell_height};
-  
+  SDL_Rect cell = { 0, 0, cell_width, cell_height };
+
   if (SDL_Init (SDL_INIT_VIDEO) != 0)
     {
       SDL_Quit ();
@@ -97,7 +97,8 @@ main (void)
           break;
         }
 
-      if (i >= 0 && i < (WINDOW_W / cell_width) && j >= 0 && j < (WINDOW_H / cell_height))
+      if (i >= 0 && i < (WINDOW_W / cell_width) && j >= 0
+          && j < (WINDOW_H / cell_height))
         gsl_matrix_set (current_state, i, j, 1);
       else
         {
@@ -114,7 +115,6 @@ main (void)
   gsl_rng_free (r);
   SDL_DestroyRenderer (renderer);
   SDL_DestroyWindow (window);
-	SDL_Quit ();
-	exit (EXIT_SUCCESS);
+  SDL_Quit ();
+  exit (EXIT_SUCCESS);
 }
-
