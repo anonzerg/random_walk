@@ -43,7 +43,7 @@ main (void)
   renderer = SDL_CreateRenderer (window, -1, SDL_RENDERER_SOFTWARE);
   if (renderer == NULL)
     {
-      SDL_DestroyRenderer (renderer);
+      SDL_DestroyWindow (window);
       handle_error ("SDL_CreateRenderer");
     }
 
@@ -55,7 +55,9 @@ main (void)
 
   SDL_RenderPresent (renderer);
 
-  unsigned int i, j, dir;
+  int i, j, dir;
+  int width = WINDOW_W / cell_width;
+  int height = WINDOW_H / cell_height;
   i = gsl_rng_uniform_int (r, WINDOW_W / cell_width);
   j = gsl_rng_uniform_int (r, WINDOW_H / cell_height);
   SDL_Event event;
@@ -84,25 +86,19 @@ main (void)
       switch (dir)
         {
         case 0:
-          i = i + 1;
+          i = (i + 1) % width;
           break;
         case 1:
-          j = j + 1;
+          j = (j + 1) % height;
           break;
         case 2:
-          i = i - 1;
+          i = (i - 1 + width) % width;
           break;
         case 3:
-          j = j - 1;
+          j = (j - 1 + height) % height;
           break;
         }
-
-      if (i >= 0 && i < (WINDOW_W / cell_width) && j >= 0
-          && j < (WINDOW_H / cell_height))
-        gsl_matrix_set (current_state, i, j, 1);
-      else
-        {
-        }
+      gsl_matrix_set (current_state, i, j, 1);
 
       SDL_RenderPresent (renderer);
       SDL_Delay (1);
